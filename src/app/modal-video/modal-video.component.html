@@ -1,0 +1,9 @@
+<ng-template #content let-modal>
+
+<youtube-player *ngIf="this.iniciado" videoId={{enlaceVideo}}
+    suggestedQuality="highres" 
+    [height]=this.alto [width]=this.ancho>
+    </youtube-player>
+</ng-template>
+
+<p (click)="open(content)">Launch demo modal</p>

@@ -1,0 +1,17 @@
+<div class="timeline">
+  <div class="timeline-card timeline-card-primary card shadow-sm">
+    <div class="card-body">
+      <form [formGroup]="tarjetaForm">
+        <span consejos="El nombre del puesto o de los estudios.&#10;Campo necesario."><input id="nombre" placeholder="Nombre del puesto" type="text" formControlName="nombre"></span>
+        <span consejos="Empresa o centro de estudios.&#10;Campo necesario."><input id="lugar"  placeholder="Lugar de empleo/estudio" type="text" formControlName="lugar"></span>
+        <span consejos="Enlace a la web de la empresa o al programa del centro.&#10;Elige una página que enseñe lo que quieres de un vistazo."><input id="enlace" placeholder="Enlace a la empresa/programa" type="text" formControlName="enlace"></span>
+        <span consejos="Las fechas de realización.&#10;Ejemplo: Abril 2020 - Marzo 2022 &#10;Campo necesario"><input id="fechas" placeholder="Fechas (Desde-hasta)" type="text" formControlName="fechas"></span>
+        <span consejos="Inserta aquí la URL del video de youtube.&#10;Puedes subirlo tú mismo con una cuenta."><input id="urlVideo" placeholder="Url Youtube" type="text" formControlName="urlVideo"></span><br>
+        <span consejos="Describe aquí la labor que realizaste.&#10;Intenta ser breve y conciso."><textarea id="texto" placeholder="Labor realizada" rows="6" type="text" formControlName="texto"></textarea></span>
+        <span consejos="Escribe aquí los datos de la empresa. &#10;Son relevantes cosas como tamaño, facturación, países en los que opera, sector..."><textarea id="descripcionEmpresa" placeholder="Descripción de la empresa" rows="6" type="text" formControlName="descripcionEmpresa"></textarea></span>
+       <button (click)="borrarTarjeta()">Borrar</button>
+        
+      </form>
+    </div>
+  </div>
+</div>

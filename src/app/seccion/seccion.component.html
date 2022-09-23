@@ -1,0 +1,9 @@
+<div class="work-experience-section px-3 px-lg-4">
+  
+    <h2 class="h3 mb-4">{{datos.nombre}}</h2>
+    <ng-container *ngFor="let item of datos.tarjetas|keyvalue|orderBy:'value.posicion'">
+    <app-tarjeta *ngIf="item.value.ignorar==false" [datos]="item.value"></app-tarjeta>
+    </ng-container>
+    <button (click)="crearTarjeta()">Nueva tarjeta</button>
+    
+  </div>
