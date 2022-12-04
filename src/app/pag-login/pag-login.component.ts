@@ -5,30 +5,31 @@ import { SupabaseService } from '../services/supabase.service'
   selector: 'app-auth',
   template: `
     <div class="row flex-center flex">
-      <form class="col-6 form-widget">
-        <h1 class="header">Supabase + Angular</h1>
-        <p class="description">Sign in via magic link with your email below</p>
+      <form class="login-form">
+        <h1 class="header">Login del creador de CVs</h1>
         <div>
           <input
             #input
             class="inputField"
             type="email"
             placeholder="Your email"
+            class="form-control-material"
           />
         </div>
         <div>
           <button
             type="submit"
             (click)="handleLogin(input.value)"
-            class="button block"
+            class="btn btn-outline-primary btn-ghost"
             [disabled]="loading"
           >
-            {{ loading ? 'Loading' : 'Send magic link' }}
+            {{ loading ? 'Loading' : 'Enviar link mágico' }}
           </button>
         </div>
       </form>
     </div>
   `,
+   styleUrls: ['./pag-login.component.scss']
 })
 export class PagLoginComponent {
   loading = false

@@ -1,13 +1,13 @@
 export interface Tarjeta {
-    enlace: String;
-    fechas: String;
-    lugar: String;
+    enlace: string;
+    fechas: string;
+    lugar: string;
     codusu:number;
     posicion: number;
-    texto: String;
-    urlVideo: String;
-    nombre: String;
-    descripcionEmpresa:String;
+    texto: string;
+    urlVideo: string;
+    nombre: string;
+    descripcionEmpresa:string;
     codSeccion:number;
     ignorar:boolean;
 }

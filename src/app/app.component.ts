@@ -5,8 +5,7 @@ import { Observable } from 'rxjs';
 import { Seccion } from './models/Seccion';
 import { Usuario } from './models/Usuario';
 import { Tarjeta } from './models/Tarjeta';
-import { Session } from '@supabase/supabase-js'
-import { resolve } from 'dns';
+import { FormBuilder } from '@angular/forms'
 export interface Item { name: string; }
 
 import { Profile } from './services/supabase.service';
@@ -14,7 +13,7 @@ import { Profile } from './services/supabase.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss', './css/aos.css']
+  styleUrls: ['./app.component.scss']
 
 })
 export class AppComponent {
@@ -22,10 +21,14 @@ export class AppComponent {
   arrCompleto!: Usuario;
   perfilUsu!: Profile;
   edad: number | undefined;
-  constructor(private readonly supabase: SupabaseService,) {
+  perfilSacado: boolean=false;
+  constructor(private readonly supabase: SupabaseService,private formBuilder: FormBuilder) {
 
   }
 
+
+
+  
   title = 'NgCV';
 
 
@@ -35,15 +38,24 @@ export class AppComponent {
   * Ambas cosas se hacen de forma asincronia con una promesa, puesto que el servicio puede tardar un segundo en enviarlo.
     **/
   ngOnInit() {
-    this.supabase.authChanges((_, session) => (this.session = session))
-    this.sacaPerfiles();
+    this.supabase.authChanges((_, session) => {
+      (this.session = session)
+
+      if (this.perfilSacado==false){
+      this.sacaPerfiles();
+      this.perfilSacado=true;
+      }
+    })
+    console.log(this.session);
+
+
 
   }
 
   sacaPerfiles() {
     this.supabase.numeroPerfil(this.session?.user?.id).then((data) => {
-      
 
+      
       //DEBUG console.log(this.session?.user?.id);
       let { data: perfilUsu } = data;
       if (perfilUsu && perfilUsu.length > 0) {
@@ -54,26 +66,18 @@ export class AppComponent {
         })
 
       }
-      else {
-        if(this.session){
-        console.log("Lugar error.");
-        window.location.reload(); //No entiendo por qué se niega a cargar los datos la primera vez que entra aunque session sea valida. Algo con los async? Distintos console log dan distintos resultados (Datos cuanticos?)
-        
-        }
-        else{
-          console.log("no auth")
-        }
 
-
-      }
     })
-
-
-
 
   }
 
+  
+  
 
+  borrarSeccion(evt: Seccion) {
+    delete this.arrCompleto.secciones[evt.nombre];
+    
+  }
 
   //No necesito preocuparme por si el objeto es indefinido ya que sólo llamo al método dentro del 
   //*NgIf, que ya comprueba que arrCompleto esté definido, y la edad es un campo not null.
@@ -100,6 +104,7 @@ export class AppComponent {
 
   //Metodo para guardar todo a la base de datos.
   guardarTodo() {
+    console.log(this.arrCompleto);
     this.supabase.guardarTodo(this.arrCompleto, this.perfilUsu[0].codusu);
   }
 
@@ -111,9 +116,12 @@ export class AppComponent {
   nuevaSeccion() {
     let nombreSeccion = prompt("Introduce el nombre de la sección.");
     if (nombreSeccion != null && nombreSeccion != "") {
-      this.arrCompleto.secciones[nombreSeccion] = { nombre: nombreSeccion, tarjetas: {}, orden: Object.keys(this.arrCompleto.secciones).length + 1 }
+      this.arrCompleto.secciones[nombreSeccion] = { nombre: nombreSeccion, tarjetas: {}, orden: Object.keys(this.arrCompleto.secciones).length + 1, ignorar:false }
     }
   }
+
+
+
 
   //Viendo como trata Angular los input, este metodo parece no ser necesario.
   //Viendo la cantidad de veces que he tenido que rehacer un método que consideré innecesario, dejo este aquí.

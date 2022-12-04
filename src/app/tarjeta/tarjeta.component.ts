@@ -12,6 +12,9 @@ export class TarjetaComponent implements OnInit {
   @Input()
   datos!: Tarjeta;
 
+  @Input()
+  contador!:number;
+
   tarjetaForm!:FormGroup;
   
 
@@ -73,27 +76,23 @@ export class TarjetaComponent implements OnInit {
 
   borrarTarjeta(){
     this.datos.ignorar=true;
+    this.contador--;
   }
 
   cambiarDatos(x:Tarjeta){
     /*
 
-    PREGUNTAR A TUTORES. Como narices se hace esta asignación bien? Por ahora la haré manual, pero... ostias.
+    //PREGUNTAR A TUTORES. Como narices se hace esta asignación bien? Por ahora la haré manual, pero... ostias.
 
     Object.keys(x).forEach(key => {
       console.log(key);
       this.datos[key as keyof Tarjeta]=x[key as keyof Tarjeta];
     });
     */
-    
-    this.datos.nombre=x.nombre;
-    this.datos.lugar=x.lugar;
-    this.datos.enlace=x.enlace;
-    this.datos.fechas=x.fechas;
-    this.datos.urlVideo=x.urlVideo;
-    this.datos.descripcionEmpresa=x.descripcionEmpresa;
-    this.datos.texto=x.texto;
 
+    Object.assign(this.datos,x);
+
+    
 
 
 

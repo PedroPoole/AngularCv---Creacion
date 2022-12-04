@@ -1,9 +1,12 @@
 <div class="work-experience-section px-3 px-lg-4">
-  
+  <div>
     <h2 class="h3 mb-4">{{datos.nombre}}</h2>
-    <ng-container *ngFor="let item of datos.tarjetas|keyvalue|orderBy:'value.posicion'">
-    <app-tarjeta *ngIf="item.value.ignorar==false" [datos]="item.value"></app-tarjeta>
-    </ng-container>
-    <button (click)="crearTarjeta()">Nueva tarjeta</button>
-    
+    <button class="btn btn-sm btn-primary" (click)="crearTarjeta()">Nueva tarjeta</button>
+    <button class="btn btn-sm btn-outline-primary" (click)="borrarSeccion()">Borrar Seccion</button>
   </div>
+  <ng-container *ngFor="let item of datos.tarjetas|keyvalue|orderBy:'value.posicion'">
+    <app-tarjeta *ngIf="item.value.ignorar==false" [datos]="item.value" [contador]="this.contador"></app-tarjeta>
+  </ng-container>
+
+
+</div>

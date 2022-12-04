@@ -1,7 +1,8 @@
 export interface Seccion {
-    id: String;
-    nombre: String;
+    id: string;
+    nombre: string;
     orden: number;
     tarjetas: { [key: string]: any };
     codSeccion:number;
+    ignorar:boolean;
   }

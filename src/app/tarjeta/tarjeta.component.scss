@@ -47,7 +47,7 @@ input, textarea{
 }
 
 span:focus-within::after{
-    content:attr(consejos);
+    content:attr(data-consejos);
     white-space: pre-line;
 }
 

@@ -1,0 +1,24 @@
+<div class="mb-3">
+<input #imageInput
+class="form-control form-control-sm "
+     
+      type="file"
+      
+      id="single"
+      accept="image/*"
+      (change)="uploadAvatar($event)"
+      [disabled]="false"
+    />
+   </div>
+    <img
+      *ngIf="_avatarUrl"
+      [src]="_avatarUrl"
+      alt="Avatar"
+      class="avatar image"
+      
+    />
+
+ 
+  
+    
+    

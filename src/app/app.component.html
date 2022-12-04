@@ -1,24 +1,28 @@
-
 <ng-container *ngIf="session; else auth">
-<body id="top" *ngIf="arrCompleto!=undefined;">
 
-  <div class="page-content">
-    <div class="container">
-      <div class="cover shadow-lg bg-white">
-        <app-datos-personales [arrCompleto]="arrCompleto"></app-datos-personales>
-            <app-seccion *ngFor="let item of arrCompleto.secciones|keyvalue|orderBy:'value.orden'"[datos]="item.value" (insertarTarjeta)="insertarTarjeta($event)"></app-seccion>            
-            <button (click)="guardarTodo()">Guardar todo</button>
-            <button (click)="nuevaSeccion()">Nueva Seccion</button>
-            <button (click)="salir()">Salir</button>
+  <body id="top" *ngIf="arrCompleto!=undefined;">
 
-            
-        <hr class="d-print-none" />
+    <div class="page-content">
+      <div class="container">
+        <div class="cover shadow-lg bg-white">
+
+          <app-datos-personales [arrCompleto]="arrCompleto"></app-datos-personales>
+          <button class="btn btn-primary" (click)="nuevaSeccion()">Nueva Seccion</button>
+          <ng-container *ngFor="let item of arrCompleto.secciones|keyvalue|orderBy:'value.orden'">
+            <app-seccion *ngIf="item.value.ignorar==false" [datos]="item.value"
+              (eliminarSeccion)="borrarSeccion($event)"></app-seccion>
+          </ng-container>
+          <button class="btn  btn-primary" (click)="guardarTodo()">Guardar todo</button>
+          
+          <button class="btn  btn-outline-primary" (click)="salir()">Salir</button>
+
+          <hr class="d-print-none" />
+        </div>
       </div>
     </div>
-  </div>
-  
 
-</body>
+
+  </body>
 </ng-container>
 <ng-template #auth>
   <app-auth></app-auth>

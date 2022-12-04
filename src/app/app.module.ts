@@ -14,6 +14,7 @@ import { YouTubePlayerModule } from "@angular/youtube-player";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PagLoginComponent } from './pag-login/pag-login.component';
 import { DatosPersonalesComponent } from './datos-personales/datos-personales.component';
+import { FotoPerfilComponent } from './foto-perfil/foto-perfil.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DatosPersonalesComponent } from './datos-personales/datos-personales.co
     AppComponent,
     NgbdModalBasic,
     PagLoginComponent,
-    DatosPersonalesComponent
+    DatosPersonalesComponent,
+    FotoPerfilComponent
     
   ],
   imports: [

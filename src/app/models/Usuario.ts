@@ -1,16 +1,17 @@
 import { Seccion } from "./Seccion";
 
 export interface Usuario {
-  id: String;
-  nombre: String;
-  apellidos: String;
+  id: string;
+  nombre: string;
+  apellidos: string;
   fechaNacimiento: Date;
-  nombreSobreMi: String;
-  sobreMi: String;
-  email:String;
+  nombreSobreMi: string;
+  sobreMi: string;
+  email:string;
   codusu:number;
-  descripcion:String;
-  telefono: String;  
-  direccion: String;
+  descripcion:string;
+  telefono: string;  
+  direccion: string;
+  imgurl:string;
   secciones:  { [key: string]: any };
   }

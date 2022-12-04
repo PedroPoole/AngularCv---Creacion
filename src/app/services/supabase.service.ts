@@ -36,7 +36,7 @@ export class SupabaseService {
   dameUsuario(id: number) {
     return this.supabase.
       from('datos').
-      select('codusu, nombre, apellidos, sobreMi, fechaNacimiento, email, telefono, direccion,nombreSobreMi,descripcion').
+      select('codusu, nombre, apellidos, sobreMi, fechaNacimiento, email, telefono, direccion,nombreSobreMi,descripcion,imgurl').
       eq('codusu', id).
       single()
   }
@@ -45,7 +45,7 @@ export class SupabaseService {
   dameSecciones(id: number) {
     return this.supabase.
       from('seccion').
-      select('nombre,orden,codSeccion').
+      select('nombre,orden,codSeccion,ignorar').
       eq('codusu', id).
       eq('ignorar',false)
       
@@ -71,6 +71,33 @@ export class SupabaseService {
   }
 
   
+  actualizaSeccion(infoSeccion:any){
+    return this.supabase.
+    from('seccion').
+    update(infoSeccion).
+    eq('codSeccion', infoSeccion.codSeccion);
+    
+  }
+
+  compruebaBucket(id:number){
+    this.supabase.
+    storage.
+    getBucket(id.toString()).then(data=>{
+      console.log(data)
+      if(data.error?.message=="The resource was not found"){
+        this.creaBucket(id);
+      }
+    })
+  }
+
+  creaBucket(id:number){
+        this.supabase
+        .storage
+        .createBucket(id.toString(), { public: true })
+      
+      
+
+  }
 
   guardaTarjeta(infoTarjeta:Tarjeta, codusu:number){
     return this.supabase.
@@ -81,10 +108,15 @@ export class SupabaseService {
   guardaSeccion(infoSeccion:any, codusu:number){
     return this.supabase.
     from('seccion').
-    insert(infoSeccion).
-    eq('codusu', codusu)
+    insert(infoSeccion)
   }
 
+  guardaDatos(infoDatos:any, codUsu:number){
+    return this.supabase.
+      from('datos').
+      update(infoDatos).
+      eq('codusu', codUsu)
+  }
 
   /** Función relativamente compleja. El objetivo final es crear un objeto asociativo de tres niveles de profundidad 
    * (usuario con sus secciones, cada sección con sus tarjetas)
@@ -96,6 +128,8 @@ export class SupabaseService {
       this.dameUsuario(id).then((infoUsuario) => {
         datos = infoUsuario.data;
   
+        this.compruebaBucket(id);
+
         // Como Typescript no aguanta los arrays relacionales, hay que usar objetos. Y no se puede hacer push() a un objeto.
         // Por lo tanto, es necesario cuando creas una clave que luego vas a poblar, crearla definida como un objeto vacío.
         this.dameSecciones(id).then((infoSecciones)=>{
@@ -144,19 +178,26 @@ export class SupabaseService {
   guardarTodo(arrCompleto:any,codusu:number){
     
     this.limpiaTarjetas(codusu).then((x)=>{
+      this.guardaDatos({apellidos:arrCompleto.apellidos, nombre:arrCompleto.nombre, sobreMi:arrCompleto.sobreMi, fechaNacimiento:arrCompleto.fechaNacimiento, email:arrCompleto.email, telefono:arrCompleto.telefono, descripcion: arrCompleto.descripcion, nombreSobreMi:arrCompleto.nombreSobreMi, imgurl:arrCompleto.imgurl},codusu).then(x=>console.log(x));
+
       Object.keys(arrCompleto.secciones).forEach((key: any) => {
         let seccionActual:Seccion=arrCompleto.secciones[key];
-        
         if(seccionActual.codSeccion==undefined){
-          this.guardaSeccion({'nombre':seccionActual.nombre,'orden':seccionActual.orden,'codusu':codusu},codusu).then((x:any)=>{
+          this.guardaSeccion({'nombre':seccionActual.nombre,'orden':seccionActual.orden,'codusu':codusu, 'ignorar':seccionActual.ignorar},codusu).then((x:any)=>{
             let respuesta:any=x.body[0];
             seccionActual.codSeccion=respuesta.codSeccion;
             this.guardarTarjetas(seccionActual,codusu);
           });
         }
         else{
-          //TODO: Update Seccion si tiene codSeccion.
-          this.guardarTarjetas(seccionActual,codusu);
+
+          
+            this.guardarTarjetas(seccionActual,codusu);
+          
+
+          //TODO: Update orden.
+          
+          this.actualizaSeccion({nombre:seccionActual.nombre, ignorar:seccionActual.ignorar, codSeccion:seccionActual.codSeccion}).then() //PERO QUE CARAJO? Sin el then no funciona
         }
       });
     })
@@ -196,24 +237,18 @@ export class SupabaseService {
     return this.supabase.auth.signOut()
   }
 
-  updateProfile(profile: Profile) {
-    const update = {
-      ...profile,
-      id: this.user?.id,
-      updated_at: new Date(),
-    }
-
-    return this.supabase.from('profiles').upsert(update, {
-      returning: 'minimal', // Don't return the value after inserting
-    })
+  updateProfile(imgurl:string) {
+    return this.supabase.from('datos').upsert({'imgurl':imgurl})
   }
 
-  downLoadImage(path: string) {
-    return this.supabase.storage.from('avatars').download(path)
+  
+
+  downLoadImage(path: string, codusu:number) {
+    return this.supabase.storage.from('public/'+codusu.toString()).download(path)
   }
 
-  uploadAvatar(filePath: string, file: File) {
-    return this.supabase.storage.from('avatars').upload(filePath, file)
+  uploadAvatar(filePath: string, file: File,codusu:number) {
+    return this.supabase.storage.from(codusu.toString()).upload(filePath, file)
   }
 }
   
