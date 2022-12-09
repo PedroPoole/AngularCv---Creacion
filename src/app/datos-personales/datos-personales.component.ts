@@ -19,11 +19,6 @@ export class DatosPersonalesComponent implements OnInit {
 
   
 
-
- 
-
-  
-
  
 
   edad: number | undefined;

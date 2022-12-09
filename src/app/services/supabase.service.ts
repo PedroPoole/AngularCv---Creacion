@@ -197,7 +197,7 @@ export class SupabaseService {
 
           //TODO: Update orden.
           
-          this.actualizaSeccion({nombre:seccionActual.nombre, ignorar:seccionActual.ignorar, codSeccion:seccionActual.codSeccion}).then() //PERO QUE CARAJO? Sin el then no funciona
+          this.actualizaSeccion({nombre:seccionActual.nombre, ignorar:seccionActual.ignorar, codSeccion:seccionActual.codSeccion}).then(x=>console.log(x)) //PERO QUE CARAJO? Sin el then no funciona
         }
       });
     })
